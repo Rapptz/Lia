@@ -8,10 +8,10 @@
 namespace lia {
 template<class Cont1, class Cont2>
 inline Unqualified<Cont1> append(Cont1&& cont1, Cont2&& cont2) {
-    Unqualified<Cont1> result(std::forward<Cont2>(cont2));
-    result.insert(std::begin(result),
-                  std::begin(cont1),
-                  std::end(cont1));
+    Unqualified<Cont1> result(std::forward<Cont1>(cont1));
+    result.insert(std::end(result),
+                  std::begin(cont2),
+                  std::end(cont2));
     return result;
 }
 
