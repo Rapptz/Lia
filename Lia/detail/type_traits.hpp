@@ -143,6 +143,9 @@ template<typename T>
 using Unqualified = RemoveCV<RemoveRef<T>>;
 
 template<typename T>
+using NestedValueType = ValueType<Unqualified<ValueType<Unqualified<T>>>>; 
+
+template<typename T>
 constexpr T abs(T t) {
     return t < 0 ? -t : t;
 }
