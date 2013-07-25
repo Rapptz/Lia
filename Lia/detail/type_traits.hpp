@@ -189,6 +189,19 @@ private:
 public:
     static constexpr bool value = sizeof(test<T>(0)) == sizeof(yes);
 };
+
+template<typename T>
+struct is_nested_container {
+private:
+    using yes = char;
+    using no = struct { char stuff[2]; };
+    template<class Cont>
+    static yes test(typename Cont::value_type::value_type*);
+    template<class Cont>
+    static no test(...);
+public:
+    static constexpr bool value = sizeof(test<T>(0)) == sizeof(yes);
+};
 } // lia
 
 #endif // LIA_DETAIL_TYPE_TRAITS_HPP
