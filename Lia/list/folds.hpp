@@ -116,7 +116,7 @@ inline bool any(Cont&& cont, Predicate&& pred) {
                        std::forward<Predicate>(pred));
 }
 
-template<class Cont, EnableIf<is_nested_container<Unqualified<Cont>>>...>
+template<class Cont, DisableIf<is_std_string<ValueType<Unqualified<Cont>>>>...>
 inline auto concat(Cont&& cont) -> Rebind<Unqualified<Cont>, NestedValueType<Cont>> {
     Rebind<Unqualified<Cont>, NestedValueType<Cont>> result;
     for(auto&& internal : cont) {
