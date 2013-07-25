@@ -176,6 +176,19 @@ template<typename T, typename U, typename... Args>
 constexpr auto max(T&& t, U&& u, Args&&... args) -> CommonType<T,U,Args...> {
     return max(max(std::forward<T>(t), std::forward<U>(u)), std::forward<Args>(args)...);
 }
+
+template<typename T>
+struct is_std_string {
+private:
+    using yes = char;
+    using no = struct { char stuff[2]; };
+    template<class Cont>
+    static yes test(decltype(Cont::npos)*);
+    template<class Cont>
+    static no test(...);
+public:
+    static constexpr bool value = sizeof(test<T>(0)) == sizeof(yes);
+};
 } // lia
 
 #endif // LIA_DETAIL_TYPE_TRAITS_HPP
