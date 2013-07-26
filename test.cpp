@@ -2,47 +2,31 @@
 #include "Lia/list/folds.hpp"
 #include <vector>
 #include <string>
-#include <iostream>
 #include <cassert>
-
-template<class Elem, class Traits, class Cont>
-std::basic_ostream<Elem,Traits>& operator<<(std::basic_ostream<Elem,Traits>& out, const Cont& cont) {
-    auto first = std::begin(cont);
-    auto last = std::end(cont);
-    if(first == last) {
-        out << "[]";
-        return out;
-    }
-    else {
-        out << '[' << *first++;
-    }
-    while(first != last) {
-        out << ',' << *first++;
-    }
-    out << ']';
-    return out;
-}
 
 void basic_test() {
     std::vector<int> v = {1,2,3,4,5,6,7,8,9,10,11};
-    std::cout << "Head: " << lia::head(v) << " Last: " << lia::last(v);
-    std::cout << "\nEmpty? " << std::boolalpha << lia::null(v);
-    std::cout << " Length: " << lia::length(v);
-    auto g = lia::tail(v);
-    auto appended = lia::append(v, g);
-    std::cout << "\nTail: " << g;
-    std::cout << "\nRegular: " << v;
-    std::cout << "\nAppended: " << appended << '\n';
+    assert(lia::head(v) == 1 && "head");
+    assert(lia::last(v) == 11 && "last");
+    assert(lia::null(v) == false && "null");
+    assert(lia::length(v) == 11 && "length");
+    assert((lia::tail(std::vector<int>{1,2,3,4}) == std::vector<int>{2,3,4}) && "tail");
+    assert((v == std::vector<int>{1,2,3,4,5,6,7,8,9,10,11}) && "const-correctness");
+    assert((lia::append(std::vector<int>{1,2,3},std::vector<int>{4,5,6}) == std::vector<int>{1,2,3,4,5,6}) && "append");
+    assert((lia::append(std::string("one"), std::string("two")) == "onetwo") && "append(str)");
 }
 
 void transform_test() {
-    std::vector<int> v = {1,2,3,4,5,6,7,8,9,10,11};
-    std::cout << "Map: " << lia::map(v, [](int v) { return v > 4; });
-    std::cout << "\nReverse: " << lia::reverse(v);
-    std::cout << "\nIntersperse: " << lia::intersperse(v, 0);
-    std::cout << "\nSubsequences: " << lia::subsequences(std::vector<int>{1,2,3,4});
-    std::cout << "\nPermutations: " << lia::permutations(std::vector<int>{1,2,3,4});
+    std::vector<int> v = {1,2,3,4,5};
+    assert((lia::map(v, [](int x) { return x > 4;}) == std::vector<bool>{false,false,false,false,true}) && "map");
+    assert((lia::reverse(v) == std::vector<int>{5,4,3,2,1}) && "reverse");
+    assert((lia::intersperse(v, 0) == std::vector<int>{1,0,2,0,3,0,4,0,5}) && "intersperse");
+    assert((lia::subsequences(std::vector<int>{1,2,3,4}).size() == 16) && "subsequences");
+    assert((lia::permutations(std::vector<int>{1,2,3,4}).size() == 24) && "permutations");
+    assert((v == std::vector<int>{1,2,3,4,5}) && "const-correctness");
 }
+
+
 
 void fold_test() {
     std::vector<int> v = {1,2,3,4,5,6,7,8,9,10};
