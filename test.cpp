@@ -26,11 +26,10 @@ void transform_test() {
     assert((v == std::vector<int>{1,2,3,4,5}) && "const-correctness");
 }
 
-
-
 void fold_test() {
     std::vector<int> v = {1,2,3,4,5,6,7,8,9,10};
-    auto b = lia::concat(std::vector<std::vector<int>>{{1,2,3},{4,5,6,7,8,9,10}});
+    auto a = std::vector<std::vector<int>>{{1,2,3},{4,5,6,7,8,9,10}};
+    auto b = lia::concat(a);
     assert(lia::foldl(v, [](int x, int y) { return x + y; }, 0) == lia::sum(v) && "foldl or foldl1");
     assert(lia::foldr(v, [](int x, int y) { return x * y; }, 1) == lia::product(v) && "foldr or foldl1");
     assert(lia::foldr1(std::vector<int>{4,5,6,7,8,9,10}, [](int x, int y) { return x * y; }) == 604800 && "foldr1");
@@ -42,6 +41,9 @@ void fold_test() {
     assert(lia::maximum(std::vector<int>{99,11,11,10}) == 99 && "maximum");
     assert(lia::concat(std::vector<std::string>{"Hello", "World"}) == "HelloWorld" && "concat(str)");
     assert(b == v && "concat");
+    auto c = lia::map(a, [](const std::vector<int>& i) { return lia::append(i, std::vector<int>{1,2,3}); });
+    auto w = lia::concat(c);
+    assert(lia::concatMap(a, [](const std::vector<int>& i) { return lia::append(i, std::vector<int>{1,2,3});}) == w && "concatMap");
 }
 
 int main() {
