@@ -1,2 +1,5 @@
 # Ignore all .exe files
 *.exe
+
+# Ignore testing cpp
+dev.cpp
