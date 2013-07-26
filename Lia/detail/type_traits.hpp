@@ -35,25 +35,25 @@ template<bool T, typename...>
 struct boolean : Const<bool, T> {};
 
 template<bool T, typename... Args>
-using bool_t = Type<boolean<T,Args...>>;
+using Bool = Type<boolean<T,Args...>>;
 
 template<typename If, typename Then, typename Else>
 using Conditional = Type<std::conditional<If::value, Then, Else>>;
 
 template<typename T>
-using Not = bool_t<!T::value>;
+using Not = Bool<!T::value>;
 
 template<typename... Args>
-struct Any : bool_t<true> {};
+struct Any : Bool<true> {};
 
 template<typename T, typename... Args>
-struct Any<T, Args...> : Conditional<T, bool_t<true>, Any<Args...>> {};
+struct Any<T, Args...> : Conditional<T, Bool<true>, Any<Args...>> {};
 
 template<typename... Args>
-struct All : bool_t<true> {};
+struct All : Bool<true> {};
 
 template<typename T, typename... Args>
-struct All<T, Args...> : Conditional<T, All<Args...>, bool_t<false>> {};
+struct All<T, Args...> : Conditional<T, All<Args...>, Bool<false>> {};
 
 template<typename T>
 struct is_allocator {
