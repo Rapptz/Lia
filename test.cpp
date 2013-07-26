@@ -57,7 +57,7 @@ void fold_test() {
     assert(lia::minimum(std::vector<int>{99,11,11,10}) == 10 && "minimum");
     assert(lia::maximum(std::vector<int>{99,11,11,10}) == 99 && "maximum");
     assert(lia::concat(std::vector<std::string>{"Hello", "World"}) == "HelloWorld" && "concat(str)");
-    assert(b == v && "concat"); // Error: allocator still maintains old allocator.
+    assert(b == v && "concat");
 }
 
 int main() {

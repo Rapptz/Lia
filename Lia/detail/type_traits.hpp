@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <utility>
 #include <cstddef>
+#include <array>
 
 namespace lia {
 template<typename T>
@@ -54,20 +55,48 @@ struct All : bool_t<true> {};
 template<typename T, typename... Args>
 struct All<T, Args...> : Conditional<T, All<Args...>, bool_t<false>> {};
 
+template<typename T>
+struct is_allocator {
+private:
+    using yes = char;
+    using no = struct { char stuff[2]; };
+    template<class Cont>
+    static yes test(typename Cont::template rebind<Cont>::other*);
+    template<class Cont>
+    static no test(...);
+public:
+    static constexpr bool value = sizeof(test<T>(0)) == sizeof(yes);
+};
+
+template<bool Cond, typename Specialization, typename Target>
+struct rebind_allocator {};
+
+template<typename Alloc, typename Target>
+struct rebind_allocator<true, Alloc, Target> { 
+    using type = typename Alloc::template rebind<Target>::other;
+};
+
+template<typename T, typename Target>
+struct rebind_allocator<false, T, Target> {
+    using type = T;
+};
+
+template<typename T, typename Target>
+using RebindAllocator = Type<rebind_allocator<is_allocator<T>::value, T, Target>>;
+
 template<typename Specialization, typename Target>
 struct rebind {};
 
 // Sensible default: assume first parameter is for the target
 template<template<typename...> class Cont, typename T, typename... Ts, typename Target>
 struct rebind<Cont<T, Ts...>, Target> {
-    using type = Cont<Target, Ts...>;
+    using type = Cont<Target, RebindAllocator<Ts, Target>...>;
 };
 
-// Special-case, needs #include <array>
-// template<typename Old, size_t N, typename Target>
-// struct rebind<std::array<Old, N>, Target> {
-//     using type = std::array<Target, N>;
-// };
+template<typename Old, size_t N, typename Target>
+struct rebind<std::array<Old, N>, Target> {
+    using type = std::array<Target, N>;
+};
 
 template<typename Specialization, typename Target>
 using Rebind = typename rebind<Specialization, Target>::type;
