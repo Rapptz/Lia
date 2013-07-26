@@ -133,6 +133,11 @@ inline auto concat(Cont&& cont) -> ValueType<Unqualified<Cont>> {
     return result;
 }
 
+template<class Cont, class T = ValueType<Unqualified<Cont>>>
+T intercalate(Cont&& cont, T&& sublist) {
+    return concat(intersperse(std::forward<Cont>(cont), std::forward<T>(sublist)));
+}
+
 template<class Cont, class Callable, EnableIf<is_nested_container<Unqualified<Cont>>>...>
 inline auto concatMap(Cont&& cont, Callable&& callable) -> decltype(concat(map(std::forward<Cont>(cont), std::forward<Callable>(callable)))) {
     return concat(map(std::forward<Cont>(cont), std::forward<Callable>(callable)));
