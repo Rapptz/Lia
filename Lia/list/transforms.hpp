@@ -64,4 +64,4 @@ inline auto permutations(Cont&& cont) -> Rebind<Unqualified<Cont>, Unqualified<C
 }
 } // lia
 
-#endif //LIA_TRANSFORMS_LIST_COMP_HPP
+#endif // LIA_TRANSFORMS_LIST_COMP_HPP

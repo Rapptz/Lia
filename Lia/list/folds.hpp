@@ -139,9 +139,9 @@ T intercalate(Cont&& cont, T&& sublist) {
 }
 
 template<class Cont, class Callable, EnableIf<is_nested_container<Unqualified<Cont>>>...>
-inline auto concatMap(Cont&& cont, Callable&& callable) -> decltype(concat(map(std::forward<Cont>(cont), std::forward<Callable>(callable)))) {
+inline auto concat_map(Cont&& cont, Callable&& callable) -> decltype(concat(map(std::forward<Cont>(cont), std::forward<Callable>(callable)))) {
     return concat(map(std::forward<Cont>(cont), std::forward<Callable>(callable)));
 }
 } // lia
 
-#endif //LIA_FOLDS_LIST_COMP_HPP
+#endif // LIA_FOLDS_LIST_COMP_HPP

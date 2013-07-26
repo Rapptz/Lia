@@ -1,5 +1,4 @@
-#include "Lia/list/basics.hpp"
-#include "Lia/list/folds.hpp"
+#include "Lia/list.hpp"
 #include <vector>
 #include <string>
 #include <cassert>
@@ -12,7 +11,7 @@ void basic_test() {
     assert(lia::length(v) == 11 && "length");
     assert((lia::tail(std::vector<int>{1,2,3,4}) == std::vector<int>{2,3,4}) && "tail");
     assert((v == std::vector<int>{1,2,3,4,5,6,7,8,9,10,11}) && "const-correctness");
-    assert((lia::append(std::vector<int>{1,2,3},std::vector<int>{4,5,6}) == std::vector<int>{1,2,3,4,5,6}) && "append");
+    assert((lia::append(std::vector<int>{1,2,3},{4,5,6}) == std::vector<int>{1,2,3,4,5,6}) && "append");
     assert((lia::append(std::string("one"), std::string("two")) == "onetwo") && "append(str)");
 }
 
@@ -43,7 +42,7 @@ void fold_test() {
     assert(b == v && "concat");
     auto c = lia::map(a, [](const std::vector<int>& i) { return lia::append(i, std::vector<int>{1,2,3}); });
     auto w = lia::concat(c);
-    assert(lia::concatMap(a, [](const std::vector<int>& i) { return lia::append(i, std::vector<int>{1,2,3});}) == w && "concatMap");
+    assert(lia::concat_map(a, [](const std::vector<int>& i) { return lia::append(i, std::vector<int>{1,2,3});}) == w && "concat_map");
     assert((lia::intercalate(std::vector<std::vector<int>>{{0,1},{4,5}}, {2,3}) == std::vector<int>{0,1,2,3,4,5}) && "intercalate");
 }
 
