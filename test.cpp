@@ -46,6 +46,15 @@ void fold_test() {
     assert((lia::intercalate(std::vector<std::vector<int>>{{0,1},{4,5}}, {2,3}) == std::vector<int>{0,1,2,3,4,5}) && "intercalate");
 }
 
+void sublist_test() {
+    std::string str("Hello World!");
+    assert(lia::take(str, 5) == "Hello" && "take(str)");
+    assert((lia::take(std::vector<int>{1,2,3,4,5}, 3) == std::vector<int>{1,2,3}) && "take(1)");
+    assert((lia::take(std::vector<int>{1,2}, 3) == std::vector<int>{1,2}) && "take(2)");
+    assert((lia::take(std::vector<int>{}, 3) == std::vector<int>{}) && "take(empty)");
+    assert((lia::drop(str, 6) == "World!") && "drop(str)");
+}
+
 int main() {
     basic_test();
     transform_test();
