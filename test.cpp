@@ -51,12 +51,20 @@ void sublist_test() {
     assert(lia::take(str, 5) == "Hello" && "take(str)");
     assert((lia::take(std::vector<int>{1,2,3,4,5}, 3) == std::vector<int>{1,2,3}) && "take(1)");
     assert((lia::take(std::vector<int>{1,2}, 3) == std::vector<int>{1,2}) && "take(2)");
-    assert((lia::take(std::vector<int>{}, 3) == std::vector<int>{}) && "take(empty)");
+    assert((lia::take(std::vector<int>{}, 3).empty()) && "take(empty)");
     assert((lia::drop(str, 6) == "World!") && "drop(str)");
+    assert((lia::split_at(str, 6) == std::make_pair(lia::take(str, 6), lia::drop(str, 6))) && "split_at");
+    std::vector<int> v = {1,2,3,4,1,2,3,4};
+    std::vector<int> w = {1,2,3};
+    assert((lia::take_while(v, [](int x) { return x < 3; }) == std::vector<int>{1,2}) && "take_while");
+    assert((lia::take_while(w, [](int x) { return x < 9; }) == w) && "take_while(2)");
+    assert((lia::drop_while(v, [](int x) { return x < 3; }) == std::vector<int>{3,4,1,2,3,4}) && "drop_while");
+    assert((lia::drop_while(w, [](int x) { return x < 9; }).empty()) && "drop_while(2)");   
 }
 
 int main() {
     basic_test();
     transform_test();
     fold_test();
+    sublist_test();
 }
