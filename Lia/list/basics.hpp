@@ -46,22 +46,19 @@ inline auto last(Cont&& cont) -> decltype(cont.back()) {
 }
 
 template<class Cont, DisableIf<detail::has_pop_front<Unqualified<Cont>>>...>
-inline Unqualified<Cont> tail(Cont&& cont) {
-    Unqualified<Cont> result(std::forward<Cont>(cont));
+inline Unqualified<Cont> tail(Cont result) {
     result.erase(std::begin(result)); // Not all containers have pop_front
     return result;
 }
 
 template<class Cont, EnableIf<detail::has_pop_front<Unqualified<Cont>>>...>
-inline Unqualified<Cont> tail(Cont&& cont) {
-    Unqualified<Cont> result(std::forward<Cont>(cont));
+inline Unqualified<Cont> tail(Cont result) {
     result.pop_front();
     return result;
 }
 
 template<class Cont>
-inline Unqualified<Cont> init(Cont&& cont) {
-    Unqualified<Cont> result(std::forward<Cont>(cont));
+inline Unqualified<Cont> init(Cont result) {
     result.pop_back();
     return result;
 }
