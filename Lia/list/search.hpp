@@ -17,6 +17,8 @@ struct negate {
 };
 } // detail
 
+const size_t npos = -1;
+
 template<class Cont>
 inline bool elem(Cont&& cont, ValueType<Unqualified<Cont>> t) {
     auto first = std::begin(cont);
@@ -53,6 +55,29 @@ inline Unqualified<Cont> filter(Cont cont, Predicate&& pred) {
 template<class Cont, class Predicate>
 inline auto partition(Cont&& cont, Predicate&& pred) -> decltype(std::make_pair(filter(cont, pred), filter(cont, detail::negate<Predicate>(pred)))) {
     return std::make_pair(filter(cont, pred), filter(cont, detail::negate<Predicate>(pred)));
+}
+
+template<class Cont>
+inline size_t elem_index(Cont&& cont, ValueType<Unqualified<Cont>> t) {
+    size_t index = 0;
+    for(auto&& i : cont) {
+        if(i == t)
+            return index;
+        ++index;
+    }
+    return npos;
+}
+
+template<class Cont>
+inline Rebind<Unqualified<Cont>, size_t> elem_indices(Cont&& cont, ValueType<Unqualified<Cont>> t) {
+    Rebind<Unqualified<Cont>, size_t> result;
+    size_t index = 0;
+    for(auto&& i : cont) {
+        if(i == t)
+            result.push_back(index);
+        ++index;
+    }
+    return result;
 }
 } // lia
 
