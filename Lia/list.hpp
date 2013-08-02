@@ -4,5 +4,6 @@
 #include "list/basics.hpp"
 #include "list/folds.hpp"
 #include "list/sublist.hpp"
+#include "list/set.hpp"
 
 #endif // LIA_LIST_COMPREHENSION_HPP
