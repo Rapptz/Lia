@@ -1,7 +1,6 @@
 #ifndef LIA_SUBLIST_LIST_COMP_HPP
 #define LIA_SUBLIST_LIST_COMP_HPP
 
-// Includes
 #include "../detail/type_traits.hpp"
 
 namespace lia {
@@ -82,7 +81,7 @@ inline auto span(Cont&& cont, Predicate&& pred) -> decltype(std::make_pair(take_
 }
 
 template<class Cont, class Predicate>
-inline auto span_not(Cont&& cont, Predicate&& pred) -> decltype(span(cont, detail::negate<Predicate>(pred))) {
+inline auto not_span(Cont&& cont, Predicate&& pred) -> decltype(span(cont, detail::negate<Predicate>(pred))) {
     return span(cont, detail::negate<Predicate>(pred));
 }
 

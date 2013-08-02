@@ -1,7 +1,6 @@
 #ifndef LIA_FOLDS_LIST_COMP_HPP
 #define LIA_FOLDS_LIST_COMP_HPP
 
-// Includes
 #include "transforms.hpp"
 
 namespace lia {

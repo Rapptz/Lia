@@ -1,7 +1,6 @@
 #ifndef LIA_TRANSFORMS_LIST_COMP_HPP
 #define LIA_TRANSFORMS_LIST_COMP_HPP
 
-// Includes
 #include "../detail/iterator.hpp"
 #include "../detail/type_traits.hpp"
 #include <algorithm>

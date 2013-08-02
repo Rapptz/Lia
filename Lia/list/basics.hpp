@@ -1,7 +1,6 @@
 #ifndef LIA_BASICS_LIST_COMP_HPP
 #define LIA_BASICS_LIST_COMP_HPP
 
-// Includes
 #include "../detail/type_traits.hpp"
 #include "../detail/iterator.hpp"
 
