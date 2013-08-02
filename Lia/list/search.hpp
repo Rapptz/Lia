@@ -79,6 +79,29 @@ inline Rebind<Unqualified<Cont>, size_t> elem_indices(Cont&& cont, ValueType<Unq
     }
     return result;
 }
+
+template<class Cont, class Predicate>
+inline size_t find_index(Cont&& cont, Predicate&& pred) {
+    size_t index = 0;
+    for(auto&& i : cont) {
+        if(pred(i))
+            return index;
+        ++index;
+    }
+    return npos;
+}
+
+template<class Cont, class Predicate>
+inline Rebind<Unqualified<Cont>, size_t> find_indices(Cont&& cont, Predicate&& pred) {
+    Rebind<Unqualified<Cont>, size_t> result;
+    size_t index = 0;
+    for(auto&& i : cont) {
+        if(pred(i))
+            result.push_back(index);
+        index++;
+    }
+    return result;
+}
 } // lia
 
 #endif // LIA_SEARCH_LIST_COMP_HPP
