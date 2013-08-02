@@ -142,6 +142,33 @@ template<class Cont, class Callable, EnableIf<is_nested_container<Unqualified<Co
 inline auto concat_map(Cont&& cont, Callable&& callable) -> decltype(concat(map(std::forward<Cont>(cont), std::forward<Callable>(callable)))) {
     return concat(map(std::forward<Cont>(cont), std::forward<Callable>(callable)));
 }
+
+template<class Cont, class BinaryFunc, typename T>
+inline Unqualified<Cont> scanl(Cont&& cont, BinaryFunc&& f, T acc) {
+    Unqualified<Cont> result;
+    auto first = std::begin(cont);
+    auto last = std::end(cont);
+    result.push_back(acc);
+    for( ; first != last; ++first) {
+        acc = f(acc, *first);
+        result.push_back(acc);
+    }
+    return result;
+}
+
+template<class Cont, class BinaryFunc>
+inline Unqualified<Cont> scanl1(Cont&& cont, BinaryFunc&& f) {
+    Unqualified<Cont> result;
+    auto first = std::begin(cont);
+    auto last = std::end(cont);
+    auto acc = *first++;
+    result.push_back(acc);
+    for( ; first != last; ++first) {
+        acc = f(acc, *first);
+        result.push_back(acc);
+    }
+    return result;
+}
 } // lia
 
 #endif // LIA_FOLDS_LIST_COMP_HPP

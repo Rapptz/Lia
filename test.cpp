@@ -44,6 +44,8 @@ void fold_test() {
     auto w = lia::concat(c);
     assert(lia::concat_map(a, [](const std::vector<int>& i) { return lia::append(i, std::vector<int>{1,2,3});}) == w && "concat_map");
     assert((lia::intercalate(std::vector<std::vector<int>>{{0,1},{4,5}}, {2,3}) == std::vector<int>{0,1,2,3,4,5}) && "intercalate");
+    assert((lia::scanl(std::vector<int>{1,2,3}, [](int x, int y) { return x + y; }, 10) == std::vector<int>{10,11,13,16}) && "scanl");
+    assert((lia::scanl1(std::vector<int>{1,2,3}, [](int x, int y) { return x + y; }) == std::vector<int>{1,3,6}) && "scanl1");
 }
 
 void sublist_test() {
