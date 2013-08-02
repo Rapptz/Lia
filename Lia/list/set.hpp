@@ -7,7 +7,7 @@
 
 namespace lia {
 template<class Cont>
-Unqualified<Cont> nub(Cont&& cont) {
+inline Unqualified<Cont> nub(Cont&& cont) {
     std::unordered_set<ValueType<Unqualified<Cont>>> hashed;
     Unqualified<Cont> result;
     auto first = std::begin(std::forward<Cont>(cont));
