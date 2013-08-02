@@ -17,7 +17,7 @@ inline auto map(const Cont& cont, Map&& mapped) -> Rebind<Cont, ResultOf<Unquali
 template<class Cont>
 inline Unqualified<Cont> reverse(Cont&& cont) {
     Unqualified<Cont> result;
-    std::reverse_copy(std::begin(cont),std::end(cont),std::back_inserter(result));
+    std::reverse_copy(std::begin(cont), std::end(cont), std::back_inserter(result));
     return result;
 }
 
@@ -53,13 +53,12 @@ inline auto subsequences(const Cont& cont) -> Rebind<Cont, Unqualified<Cont>> {
 }
 
 template<class Cont>
-inline auto permutations(Cont&& cont) -> Rebind<Unqualified<Cont>, Unqualified<Cont>> {
+inline auto permutations(Cont cont) -> Rebind<Unqualified<Cont>, Unqualified<Cont>> {
     Rebind<Unqualified<Cont>, Unqualified<Cont>> result;
-    Unqualified<Cont> temp(std::forward<Cont>(cont));
     do {
-        result.push_back(temp);
+        result.push_back(cont);
     }
-    while(std::next_permutation(std::begin(temp), std::end(temp)));
+    while(std::next_permutation(std::begin(cont), std::end(cont)));
     return result;
 }
 } // lia
