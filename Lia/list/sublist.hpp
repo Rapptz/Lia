@@ -2,20 +2,9 @@
 #define LIA_SUBLIST_LIST_COMP_HPP
 
 #include "../detail/type_traits.hpp"
+#include "../adaptors/negator.hpp"
 
 namespace lia {
-namespace detail {
-template<typename T>
-struct negate {
-    T pred;
-    negate(T t): pred(std::move(t)) {}
-    template<typename... Args>
-    auto operator()(Args&&... args) -> decltype(!pred(std::forward<Args>(args)...)) {
-        return !pred(std::forward<Args>(args)...);
-    }
-};
-} // detail
-
 template<class Cont>
 inline Unqualified<Cont> take(Cont&& cont, size_t n) {
     if(cont.size() < n)
@@ -81,10 +70,9 @@ inline auto span(Cont&& cont, Predicate&& pred) -> decltype(std::make_pair(take_
 }
 
 template<class Cont, class Predicate>
-inline auto not_span(Cont&& cont, Predicate&& pred) -> decltype(span(cont, detail::negate<Predicate>(pred))) {
-    return span(cont, detail::negate<Predicate>(pred));
+inline auto not_span(Cont&& cont, Predicate&& pred) -> decltype(span(cont, negator<Predicate>(pred))) {
+    return span(cont, negator<Predicate>(pred));
 }
-
 } // lia
 
 #endif // LIA_SUBLIST_LIST_COMP_HPP

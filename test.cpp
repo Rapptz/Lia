@@ -64,9 +64,26 @@ void sublist_test() {
     assert((lia::drop_while(w, [](int x) { return x < 9; }).empty()) && "drop_while(2)");   
 }
 
+void search_test() {
+    std::vector<int> v = {1,2,3,4,5};
+    assert(lia::elem(v, 5) && "elem(true)");
+    assert(!lia::elem(v, 6) && "elem(false)");
+    assert(lia::not_elem(v, 7) && "not_elem");
+    assert((*lia::find(v, [](int x) { return x % 2 == 0; }) == 2) && "find(1)");
+    assert((lia::find(v, [](int x) { return x == 6; }) == v.end()) && "find(2)");
+    assert((lia::filter(v, [](int x) { return x % 2 == 0; }) == std::vector<int>{2,4}) && "filter");
+    assert((lia::elem_index(v, 2) == 1) && "elem_index");
+    assert((lia::elem_index(v, 6) == lia::npos) && "elem_index(npos)");
+    assert((lia::elem_indices(v, 5) == std::vector<size_t>{4}) && "elem_indices");
+    assert((lia::find_index(v, [](int x) { return x % 2 == 0; }) == 1) && "find_index");
+    assert((lia::find_index(v, [](int x) { return x == 7; }) == lia::npos) && "find_index(npos)");
+    assert((lia::find_indices(v, [](int x) { return x % 2 == 0; }) == std::vector<size_t>{1,3}) && "find_indices");
+}
+
 int main() {
     basic_test();
     transform_test();
     fold_test();
     sublist_test();
+    search_test();
 }
