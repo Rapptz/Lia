@@ -144,8 +144,8 @@ inline auto concat_map(Cont&& cont, Callable&& callable) -> decltype(concat(map(
 }
 
 template<class Cont, class BinaryFunc, typename T>
-inline Unqualified<Cont> scanl(Cont&& cont, BinaryFunc&& f, T acc) {
-    Unqualified<Cont> result;
+inline Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> scanl(Cont&& cont, BinaryFunc&& f, T acc) {
+    Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> result;
     auto first = std::begin(cont);
     auto last = std::end(cont);
     result.push_back(acc);
@@ -157,11 +157,11 @@ inline Unqualified<Cont> scanl(Cont&& cont, BinaryFunc&& f, T acc) {
 }
 
 template<class Cont, class BinaryFunc>
-inline Unqualified<Cont> scanl1(Cont&& cont, BinaryFunc&& f) {
-    Unqualified<Cont> result;
+inline Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> scanl1(Cont&& cont, BinaryFunc&& f) {
+    Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> result;
     auto first = std::begin(cont);
     auto last = std::end(cont);
-    auto acc = *first++;
+    ResultOf<Unqualified<BinaryFunc>> acc = *first++;
     result.push_back(acc);
     for( ; first != last; ++first) {
         acc = f(acc, *first);
