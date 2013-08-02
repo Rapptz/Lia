@@ -49,6 +49,11 @@ inline Unqualified<Cont> filter(Cont cont, Predicate&& pred) {
     cont.erase(std::remove_if(std::begin(cont), std::end(cont), detail::negate<Predicate>(pred)),std::end(cont));
     return cont;
 }
+
+template<class Cont, class Predicate>
+inline auto partition(Cont&& cont, Predicate&& pred) -> decltype(std::make_pair(filter(cont, pred), filter(cont, detail::negate<Predicate>(pred)))) {
+    return std::make_pair(filter(cont, pred), filter(cont, detail::negate<Predicate>(pred)));
+}
 } // lia
 
 #endif // LIA_SEARCH_LIST_COMP_HPP
