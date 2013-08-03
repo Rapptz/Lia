@@ -7,18 +7,17 @@
 #include <algorithm>
 
 namespace lia {
-template<class Cont, typename Map>
-inline auto map(const Cont& cont, Map&& mapped) -> Rebind<Cont, ResultOf<Unqualified<Map>>> {
-    Rebind<Cont, ResultOf<Unqualified<Map>>> result;
-    std::transform(std::begin(cont),std::end(cont), std::back_inserter(result),mapped);
+template<class Cont, typename Function>
+inline auto map(const Cont& cont, Function&& f) -> Rebind<Cont, decltype(f(cont.back()))> {
+    Rebind<Cont, decltype(f(cont.back()))> result;
+    std::transform(std::begin(cont),std::end(cont), std::back_inserter(result), f);
     return result;
 }
 
 template<class Cont>
-inline Unqualified<Cont> reverse(Cont&& cont) {
-    Unqualified<Cont> result;
-    std::reverse_copy(std::begin(cont), std::end(cont), std::back_inserter(result));
-    return result;
+inline Unqualified<Cont> reverse(Cont cont) {
+    std::reverse(std::begin(cont), std::end(cont));
+    return cont;
 }
 
 template<class Cont>
