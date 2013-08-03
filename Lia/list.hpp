@@ -6,5 +6,6 @@
 #include "list/sublist.hpp"
 #include "list/set.hpp"
 #include "list/search.hpp"
+#include "list/zip.hpp"
 
 #endif // LIA_LIST_COMPREHENSION_HPP

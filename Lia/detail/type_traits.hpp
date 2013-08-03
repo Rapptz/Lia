@@ -172,6 +172,9 @@ template<typename T>
 using Unqualified = RemoveCV<RemoveRef<T>>;
 
 template<typename T>
+using BareValueType = ValueType<Unqualified<T>>;
+
+template<typename T>
 using NestedValueType = ValueType<Unqualified<ValueType<Unqualified<T>>>>; 
 
 template<typename T>
