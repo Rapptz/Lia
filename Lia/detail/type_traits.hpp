@@ -106,21 +106,16 @@ struct rebind<std::array<Old, N>, Target> {
 template<typename Specialization, typename Target>
 using Rebind = typename rebind<Specialization, Target>::type;
 
-template<typename T>
-struct result_of_impl : public result_of_impl<decltype(&T::operator())> {};
+template<typename Sig, typename Anon = void>
+struct result_of_impl {};
 
-template<typename T, typename R, typename... Args>
-struct result_of_impl<R(T::*)(Args...) const> {
-    using type = R;
+template<typename Functor, typename... Args>
+struct result_of_impl<Functor(Args...), Void<decltype(std::declval<Functor>()(std::declval<Args>()...))>> {
+    using type = decltype(std::declval<Functor>()(std::declval<Args>()...));
 };
 
-template<typename T, typename R, typename... Args>
-struct result_of_impl<R(T::*)(Args...)> {
-    using type = R;
-};
-
-template<typename T>
-using ResultOf = Type<result_of_impl<T>>;
+template<typename Signature>
+using ResultOf = Type<result_of_impl<Signature>>;
 
 template<typename... Args>
 using EnableIf = Type<std::enable_if<All<Args...>::value>>;
