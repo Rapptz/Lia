@@ -5,16 +5,16 @@
 
 namespace lia {
 struct even {
-    template<typename T, typename U>
-    auto operator()(T&& t, U&& u) -> decltype(std::forward<T>(t) % std::forward<U>(u) == 0) {
-        return std::forward<T>(t) % std::forward<U>(u) == 0;
+    template<typename T>
+    auto operator()(T&& t) -> decltype(std::forward<T>(t) % 2 == 0) {
+        return std::forward<T>(t) % 2 == 0;
     }
 };
 
 struct odd {
-    template<typename T, typename U>
-    auto operator()(T&& t, U&& u) -> decltype(std::forward<T>(t) % std::forward<U>(u) != 0) {
-        return std::forward<T>(t) % std::forward<U>(u) != 0;
+    template<typename T>
+    auto operator()(T&& t) -> decltype(std::forward<T>(t) % 2 != 0) {
+        return std::forward<T>(t) % 2 != 0;
     }
 };
 }
