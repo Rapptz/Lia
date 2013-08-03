@@ -43,32 +43,32 @@ inline auto foldr1(Cont&& cont, BinaryFunc&& func) -> ResultOf<Unqualified<Binar
 
 // Special folds
 template<class Cont>
-inline BareValueType<Cont> sum(Cont&& cont) {
-    using T = BareValueType<Cont>;
+inline ValueType<Cont> sum(Cont&& cont) {
+    using T = ValueType<Cont>;
     return foldl1(std::forward<Cont>(cont),[](T x, T y) { return x + y; });
 }
 
 template<class Cont>
-inline BareValueType<Cont> product(Cont&& cont) {
-    using T = BareValueType<Cont>;
+inline ValueType<Cont> product(Cont&& cont) {
+    using T = ValueType<Cont>;
     return foldl1(std::forward<Cont>(cont),[](T x, T y) { return x * y; });
 }
 
 template<class Cont, class Predicate = less>
-inline BareValueType<Cont> minimum(Cont&& cont, Predicate&& pred = Predicate()) {
+inline ValueType<Cont> minimum(Cont&& cont, Predicate&& pred = Predicate()) {
     return *(std::min_element(std::begin(std::forward<Cont>(cont)),
                               std::end(std::forward<Cont>(cont)),
                               std::forward<Predicate>(pred)));
 }
 
 template<class Cont, class Predicate = less>
-inline BareValueType<Cont> maximum(Cont&& cont, Predicate&& pred = Predicate()) {
+inline ValueType<Cont> maximum(Cont&& cont, Predicate&& pred = Predicate()) {
     return *(std::max_element(std::begin(std::forward<Cont>(cont)),
                               std::end(std::forward<Cont>(cont)),
                               std::forward<Predicate>(pred)));
 }
 
-template<class Cont, EnableIf<std::is_same<BareValueType<Cont>, bool>>...>
+template<class Cont, EnableIf<std::is_same<ValueType<Cont>, bool>>...>
 inline bool all(Cont&& cont) {
     for(auto&& boolean : cont) {
         if(!boolean)
@@ -84,7 +84,7 @@ inline bool all(Cont&& cont, Predicate&& pred) {
                        std::forward<Predicate>(pred));
 }
 
-template<class Cont, EnableIf<std::is_same<BareValueType<Cont>, bool>>...>
+template<class Cont, EnableIf<std::is_same<ValueType<Cont>, bool>>...>
 inline bool any(Cont&& cont) {
     for(auto&& boolean : cont) {
         if(boolean)
@@ -100,7 +100,7 @@ inline bool any(Cont&& cont, Predicate&& pred) {
                        std::forward<Predicate>(pred));
 }
 
-template<class Cont, DisableIf<is_std_string<BareValueType<Cont>>>...>
+template<class Cont, DisableIf<is_std_string<ValueType<Cont>>>...>
 inline auto concat(Cont&& cont) -> Rebind<Unqualified<Cont>, NestedValueType<Cont>> {
     Rebind<Unqualified<Cont>, NestedValueType<Cont>> result;
     for(auto&& internal : cont) {
@@ -109,15 +109,15 @@ inline auto concat(Cont&& cont) -> Rebind<Unqualified<Cont>, NestedValueType<Con
     return result;
 }
 
-template<class Cont, EnableIf<is_std_string<BareValueType<Cont>>>...>
-inline auto concat(Cont&& cont) -> BareValueType<Cont> {
-    BareValueType<Cont> result;
+template<class Cont, EnableIf<is_std_string<ValueType<Cont>>>...>
+inline auto concat(Cont&& cont) -> ValueType<Cont> {
+    ValueType<Cont> result;
     for(auto&& str : cont)
         result += str;
     return result;
 }
 
-template<class Cont, class T = BareValueType<Cont>>
+template<class Cont, class T = ValueType<Cont>>
 T intercalate(Cont&& cont, T&& sublist) {
     return concat(intersperse(std::forward<Cont>(cont), std::forward<T>(sublist)));
 }

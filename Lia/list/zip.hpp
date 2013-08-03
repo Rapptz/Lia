@@ -19,9 +19,9 @@ T&& forward_index(Cont<T>&& cont, unsigned i) {
 } // detail
 
 template<typename... Args>
-std::vector<std::tuple<BareValueType<Args>...>> zip(Args&&... args) {
+std::vector<std::tuple<ValueType<Args>...>> zip(Args&&... args) {
     auto size = min(args.size()...);
-    std::vector<std::tuple<BareValueType<Args>...>> result;
+    std::vector<std::tuple<ValueType<Args>...>> result;
     result.reserve(size);
     for(unsigned i = 0; i < size; ++i) {
         result.emplace_back(detail::forward_index(std::forward<Args>(args), i)...);

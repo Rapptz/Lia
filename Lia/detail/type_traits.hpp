@@ -11,9 +11,6 @@ namespace lia {
 template<typename T>
 using Type = typename T::type;
 
-template<typename T>
-using ValueType = typename T::value_type;
-
 template<typename... Args>
 using CommonType = Type<std::common_type<Args...>>;
 
@@ -172,10 +169,10 @@ template<typename T>
 using Unqualified = RemoveCV<RemoveRef<T>>;
 
 template<typename T>
-using BareValueType = ValueType<Unqualified<T>>;
+using ValueType = typename Unqualified<T>::value_type;
 
 template<typename T>
-using NestedValueType = ValueType<Unqualified<ValueType<Unqualified<T>>>>; 
+using NestedValueType = ValueType<ValueType<T>>; 
 
 template<typename T>
 constexpr T abs(T t) {
