@@ -2,23 +2,9 @@
 #define LIA_FOLDS_LIST_COMP_HPP
 
 #include "transforms.hpp"
+#include "../functional/objects/comparison.hpp"
 
 namespace lia {
-namespace detail {
-struct less {
-    template<typename T, typename U>
-    auto operator()(T&& t, U&& u) -> decltype(std::forward<T>(t) < std::forward<U>(u)) {
-        return std::forward<T>(t) < std::forward<U>(u);
-    }
-};
-struct greater {
-    template<typename T, typename U>
-    auto operator()(T&& t, U&& u) -> decltype(std::forward<T>(t) > std::forward<U>(u)) {
-        return std::forward<T>(t) > std::forward<U>(u);
-    }
-};
-} // detail
-
 template<class Cont, typename T, class BinaryFunc>
 inline T foldl(Cont&& cont, BinaryFunc&& func, T starting) {
     return std::accumulate(std::begin(std::forward<Cont>(cont)),
@@ -69,14 +55,14 @@ inline ValueType<Unqualified<Cont>> product(Cont&& cont) {
     return foldl1(std::forward<Cont>(cont),[](T x, T y) { return x * y; });
 }
 
-template<class Cont, class Predicate = detail::less>
+template<class Cont, class Predicate = less>
 inline ValueType<Unqualified<Cont>> minimum(Cont&& cont, Predicate&& pred = Predicate()) {
     return *(std::min_element(std::begin(std::forward<Cont>(cont)),
                               std::end(std::forward<Cont>(cont)),
                               std::forward<Predicate>(pred)));
 }
 
-template<class Cont, class Predicate = detail::less>
+template<class Cont, class Predicate = less>
 inline ValueType<Unqualified<Cont>> maximum(Cont&& cont, Predicate&& pred = Predicate()) {
     return *(std::max_element(std::begin(std::forward<Cont>(cont)),
                               std::end(std::forward<Cont>(cont)),
