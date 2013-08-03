@@ -28,6 +28,14 @@ struct identity {
     using type = T;
 };
 
+template<typename...>
+struct void_ { 
+    using type = void;
+};
+
+template<typename... T>
+using Void = typename void_<T...>::type;
+
 template<bool T, typename...>
 struct boolean : Const<bool, T> {};
 

@@ -8,7 +8,7 @@ namespace lia {
 namespace detail {
 struct has_pop_front_impl {
     template<typename T>
-    static auto test(const T* t) -> decltype(t->pop_front(), Bool<true>()) {}
+    static auto test(T* t) -> decltype(t->pop_front(), Bool<true>()) {}
     template<typename>
     static auto test(...) -> Bool<false>;
 };
