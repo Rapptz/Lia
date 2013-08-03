@@ -4,7 +4,6 @@
 #include "list/basics.hpp"
 #include "list/folds.hpp"
 #include "list/sublist.hpp"
-#include "list/set.hpp"
 #include "list/search.hpp"
 #include "list/zip.hpp"
 
