@@ -3,10 +3,12 @@
 
 #include "../detail/type_traits.hpp"
 #include <tuple>
-#include <vector>
 
 namespace lia {
 namespace detail {
+template<size_t N, typename... Args>
+using Arg = Type<std::tuple_element<N, std::tuple<Args...>>>;
+
 template<class Cont>
 inline const ValueType<Cont>& forward_index(const Cont& cont, unsigned i) {
     return cont[i];
@@ -19,9 +21,9 @@ inline ValueType<Cont>&& forward_index(Cont&& cont, unsigned i) {
 } // detail
 
 template<typename... Args>
-inline std::vector<std::tuple<ValueType<Args>...>> zip(Args&&... args) {
+inline Rebind<detail::Arg<0, Unqualified<Args>...>, std::tuple<ValueType<Args>...>> zip(Args&&... args) {
     auto size = min(args.size()...);
-    std::vector<std::tuple<ValueType<Args>...>> result;
+    Rebind<detail::Arg<0, Unqualified<Args>...>, std::tuple<ValueType<Args>...>> result;
     result.reserve(size);
     for(unsigned i = 0; i < size; ++i) {
         result.emplace_back(detail::forward_index(std::forward<Args>(args), i)...);
@@ -29,13 +31,12 @@ inline std::vector<std::tuple<ValueType<Args>...>> zip(Args&&... args) {
     return result;
 }
 
-template<class Cont, class Function, typename... Args>
-inline auto zip_with(Function&& f, Cont cont, Args&&... args) -> Rebind<Cont, decltype(f(cont.back(), args.back()...))> {
-    Rebind<Cont, decltype(f(cont.back(), args.back()...))> result;
-    auto size = min(cont.size(), args.size()...);
+template<class Function, typename... Args>
+inline auto zip_with(Function&& f, Args&&... args) -> Rebind<detail::Arg<0, Unqualified<Args>...>, decltype(f(args.back()...))> {
+    Rebind<detail::Arg<0, Unqualified<Args>...>, decltype(f(args.back()...))> result;
+    auto size = min(args.size()...);
     for(unsigned i = 0; i < size; ++i) {
-        result.emplace_back(f(detail::forward_index(cont, i), 
-                              detail::forward_index(std::forward<Args>(args), i)...));
+        result.emplace_back(f(detail::forward_index(std::forward<Args>(args), i)...));
     }
     return result;
 }
