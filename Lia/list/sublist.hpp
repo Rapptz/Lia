@@ -2,7 +2,7 @@
 #define LIA_SUBLIST_LIST_COMP_HPP
 
 #include "../detail/type_traits.hpp"
-#include "../adaptors/negator.hpp"
+#include "../functional/adaptors/negator.hpp"
 
 namespace lia {
 template<class Cont>

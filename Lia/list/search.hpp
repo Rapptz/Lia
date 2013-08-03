@@ -2,7 +2,7 @@
 #define LIA_SEARCH_LIST_COMP_HPP
 
 #include "../detail/type_traits.hpp"
-#include "../adaptors/negator.hpp"
+#include "../functional/adaptors/negator.hpp"
 #include <algorithm>
 
 namespace lia {
