@@ -3,6 +3,7 @@
 
 #include "../detail/iterator.hpp"
 #include "../detail/type_traits.hpp"
+#include "../functional/objects/comparison.hpp"
 #include <algorithm>
 
 namespace lia {
@@ -59,6 +60,12 @@ inline auto permutations(Cont cont) -> Rebind<Unqualified<Cont>, Unqualified<Con
     }
     while(std::next_permutation(std::begin(cont), std::end(cont)));
     return result;
+}
+
+template<class Cont, class Predicate = less>
+inline Unqualified<Cont> sort(Cont cont, Predicate&& pred = Predicate()) {
+    std::sort(std::begin(cont), std::end(cont), pred);
+    return cont;
 }
 } // lia
 

@@ -2,7 +2,6 @@
 #define LIA_FOLDS_LIST_COMP_HPP
 
 #include "transforms.hpp"
-#include "../functional/objects/comparison.hpp"
 
 namespace lia {
 template<class Cont, typename T, class BinaryFunc>
