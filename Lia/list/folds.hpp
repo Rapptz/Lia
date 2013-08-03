@@ -17,25 +17,25 @@ inline T foldr(Cont&& cont, BinaryFunc&& func, T starting) {
     auto first = rbegin(std::forward<Cont>(cont));
     auto last = rend(std::forward<Cont>(cont));
     for(; first != last; ++first)
-        starting = func(*first,starting);
+        starting = func(*first, starting);
     return starting;
 }
 
 template<class Cont, class BinaryFunc>
-inline auto foldl1(Cont&& cont, BinaryFunc&& func) -> ResultOf<Unqualified<BinaryFunc>> {
-    auto first = std::begin(std::forward<Cont>(cont));
-    auto last = std::end(std::forward<Cont>(cont));
-    ResultOf<Unqualified<BinaryFunc>> init = *first++;
+inline auto foldl1(Cont&& cont, BinaryFunc&& func) -> decltype(func(cont.back(), cont.back())) {
+    auto first = std::begin(cont);
+    auto last = std::end(cont);
+    decltype(func(cont.back(), cont.back())) init = *first++;
     for(; first != last; ++first)
         init = func(init, *first);
     return init;
 }
 
 template<class Cont, class BinaryFunc>
-inline auto foldr1(Cont&& cont, BinaryFunc&& func) -> ResultOf<Unqualified<BinaryFunc>> {
-    auto first = rbegin(std::forward<Cont>(cont));
-    auto last = rend(std::forward<Cont>(cont));
-    ResultOf<Unqualified<BinaryFunc>> init = *first++;
+inline auto foldr1(Cont&& cont, BinaryFunc&& func) -> decltype(func(cont.back(), cont.back())) {
+    auto first = rbegin(cont);
+    auto last = rend(cont);
+    decltype(func(cont.back(), cont.back())) init = *first++;
     for(; first != last; ++first)
         init = func(*first, init);
     return init;
@@ -45,13 +45,13 @@ inline auto foldr1(Cont&& cont, BinaryFunc&& func) -> ResultOf<Unqualified<Binar
 template<class Cont>
 inline ValueType<Cont> sum(Cont&& cont) {
     using T = ValueType<Cont>;
-    return foldl1(std::forward<Cont>(cont),[](T x, T y) { return x + y; });
+    return foldl1(std::forward<Cont>(cont), [](T x, T y) { return x + y; });
 }
 
 template<class Cont>
 inline ValueType<Cont> product(Cont&& cont) {
     using T = ValueType<Cont>;
-    return foldl1(std::forward<Cont>(cont),[](T x, T y) { return x * y; });
+    return foldl1(std::forward<Cont>(cont), [](T x, T y) { return x * y; });
 }
 
 template<class Cont, class Predicate = less>
@@ -128,8 +128,8 @@ inline auto concat_map(Cont&& cont, Callable&& callable) -> decltype(concat(map(
 }
 
 template<class Cont, class BinaryFunc, typename T>
-inline Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> scanl(Cont&& cont, BinaryFunc&& f, T acc) {
-    Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> result;
+inline auto scanl(Cont&& cont, BinaryFunc&& f, T acc) -> Rebind<Unqualified<Cont>, decltype(f(acc, cont.back()))> {
+    Rebind<Unqualified<Cont>, decltype(f(acc, cont.back()))> result;
     auto first = std::begin(cont);
     auto last = std::end(cont);
     result.push_back(acc);
@@ -141,11 +141,11 @@ inline Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> scanl(Cont&&
 }
 
 template<class Cont, class BinaryFunc>
-inline Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> scanl1(Cont&& cont, BinaryFunc&& f) {
-    Rebind<Unqualified<Cont>, ResultOf<Unqualified<BinaryFunc>>> result;
+inline auto scanl1(Cont&& cont, BinaryFunc&& f) -> Rebind<Unqualified<Cont>, decltype(f(cont.back(), cont.back()))> {
+    Rebind<Unqualified<Cont>, decltype(f(cont.back(), cont.back()))> result;
     auto first = std::begin(cont);
     auto last = std::end(cont);
-    ResultOf<Unqualified<BinaryFunc>> acc = *first++;
+    decltype(f(cont.back(), cont.back())) acc = *first++;
     result.push_back(acc);
     for( ; first != last; ++first) {
         acc = f(acc, *first);
