@@ -106,12 +106,12 @@ struct rebind<std::array<Old, N>, Target> {
 template<typename Specialization, typename Target>
 using Rebind = typename rebind<Specialization, Target>::type;
 
-template<typename Sig, typename Anon = void>
+template<typename Signature, typename Anon = void>
 struct result_of_impl {};
 
-template<typename Functor, typename... Args>
-struct result_of_impl<Functor(Args...), Void<decltype(std::declval<Functor>()(std::declval<Args>()...))>> {
-    using type = decltype(std::declval<Functor>()(std::declval<Args>()...));
+template<typename Function, typename... Args>
+struct result_of_impl<Function(Args...), Void<decltype(std::declval<Function>()(std::declval<Args>()...))>> {
+    using type = decltype(std::declval<Function>()(std::declval<Args>()...));
 };
 
 template<typename Signature>
@@ -176,6 +176,11 @@ using ValueType = typename Unqualified<T>::value_type;
 
 template<typename T>
 using NestedValueType = ValueType<ValueType<T>>; 
+
+template<typename T>
+constexpr AddConst<T>& as_const(T& t) {
+    return t;
+}
 
 template<typename T>
 constexpr T abs(T t) {
