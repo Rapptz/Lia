@@ -18,15 +18,15 @@ constexpr auto invoke(F&& f, Tuple&& tuple) -> decltype(invoke_impl(std::declval
 
 template<typename Function, typename... Args>
 struct curry_type {
+    using tuple_type = std::tuple<Args...>;
 private:
     Function func;
-    std::tuple<Args...> args;
+    tuple_type args;
 public:
-    curry_type(Function&& f, std::tuple<Args...> n): func(std::forward<Function>(f)), args(std::move(n)) {}
+    curry_type(Function&& f, tuple_type n): func(std::forward<Function>(f)), args(std::move(n)) {}
 
     template<typename... T>
-    auto operator()(T&&... t) -> decltype(detail::invoke(func, std::tuple_cat(std::move(args), std::forward_as_tuple(t...))))
-    {
+    auto operator()(T&&... t) -> decltype(detail::invoke(func, std::tuple_cat(std::move(args), std::forward_as_tuple(t...)))) {
         return detail::invoke(func, std::tuple_cat(std::move(args), std::forward_as_tuple(t...)));
     }
 };
