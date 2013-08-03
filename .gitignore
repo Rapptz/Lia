@@ -3,3 +3,9 @@
 
 # Ignore testing cpp
 dev.cpp
+
+# Ignore MSVC cruft
+*.sln
+*.vcxproj*
+[Dd]ebug/*
+[Rr]elease/*
