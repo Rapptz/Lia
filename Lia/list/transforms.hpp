@@ -22,7 +22,7 @@ inline Unqualified<Cont> reverse(Cont&& cont) {
 }
 
 template<class Cont>
-inline Unqualified<Cont> intersperse(const Cont& cont, ValueType<Unqualified<Cont>> elem) {
+inline Unqualified<Cont> intersperse(const Cont& cont, BareValueType<Cont> elem) {
     Unqualified<Cont> result;
     auto first = std::begin(cont);
     auto last = std::end(cont);
@@ -69,7 +69,7 @@ inline Unqualified<Cont> sort(Cont cont, Predicate&& pred = Predicate()) {
 }
 
 template<class Cont, class Predicate = equal_to>
-inline Unqualified<Cont> remove(Cont cont, ValueType<Unqualified<Cont>> t, Predicate&& pred = Predicate()) {
+inline Unqualified<Cont> remove(Cont cont, BareValueType<Cont> t, Predicate&& pred = Predicate()) {
     auto first = std::begin(cont);
     auto last = std::end(cont);
     for(; first != last; ++first) {

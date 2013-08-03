@@ -9,7 +9,7 @@ namespace lia {
 const size_t npos = -1;
 
 template<class Cont>
-inline bool elem(Cont&& cont, ValueType<Unqualified<Cont>> t) {
+inline bool elem(Cont&& cont, BareValueType<Cont> t) {
     auto first = std::begin(cont);
     auto last = std::end(cont);
     for(; first != last; ++first) {
@@ -20,7 +20,7 @@ inline bool elem(Cont&& cont, ValueType<Unqualified<Cont>> t) {
 }
 
 template<class Cont>
-inline bool not_elem(Cont&& cont, ValueType<Unqualified<Cont>> t) {
+inline bool not_elem(Cont&& cont, BareValueType<Cont> t) {
     return !elem(std::forward<Cont>(cont), t);
 }
 
@@ -47,7 +47,7 @@ inline auto partition(Cont&& cont, Predicate&& pred) -> decltype(std::make_pair(
 }
 
 template<class Cont>
-inline size_t elem_index(Cont&& cont, ValueType<Unqualified<Cont>> t) {
+inline size_t elem_index(Cont&& cont, BareValueType<Cont> t) {
     size_t index = 0;
     for(auto&& i : cont) {
         if(i == t)
@@ -58,7 +58,7 @@ inline size_t elem_index(Cont&& cont, ValueType<Unqualified<Cont>> t) {
 }
 
 template<class Cont>
-inline Rebind<Unqualified<Cont>, size_t> elem_indices(Cont&& cont, ValueType<Unqualified<Cont>> t) {
+inline Rebind<Unqualified<Cont>, size_t> elem_indices(Cont&& cont, BareValueType<Cont> t) {
     Rebind<Unqualified<Cont>, size_t> result;
     size_t index = 0;
     for(auto&& i : cont) {
