@@ -24,7 +24,6 @@ template<typename... Args>
 inline Rebind<detail::Arg<0, Unqualified<Args>...>, std::tuple<ValueType<Args>...>> zip(Args&&... args) {
     auto size = min(args.size()...);
     Rebind<detail::Arg<0, Unqualified<Args>...>, std::tuple<ValueType<Args>...>> result;
-    result.reserve(size);
     for(unsigned i = 0; i < size; ++i) {
         result.emplace_back(detail::forward_index(std::forward<Args>(args), i)...);
     }
@@ -33,8 +32,8 @@ inline Rebind<detail::Arg<0, Unqualified<Args>...>, std::tuple<ValueType<Args>..
 
 template<class Function, typename... Args>
 inline auto zip_with(Function&& f, Args&&... args) -> Rebind<detail::Arg<0, Unqualified<Args>...>, decltype(f(args.back()...))> {
-    Rebind<detail::Arg<0, Unqualified<Args>...>, decltype(f(args.back()...))> result;
     auto size = min(args.size()...);
+    Rebind<detail::Arg<0, Unqualified<Args>...>, decltype(f(args.back()...))> result;
     for(unsigned i = 0; i < size; ++i) {
         result.emplace_back(f(detail::forward_index(std::forward<Args>(args), i)...));
     }
