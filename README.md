@@ -15,7 +15,7 @@ List comprehensions are a way to create lists based on existing lists. It builds
 - `std::unordered_set`
 - `std::unordered_multiset`
 
-Support for `std::string` where typically not possible is given through uses of SFINAE, this also applies to efficient usage of operations of `std::list` that doesn't use the [erase-remove idiom][eri].
+Support for `std::string` where typically not possible is given through uses of SFINAE, this also applies to efficient usage of operations of `std::list` which doesn't use the [erase-remove idiom][eri] and has its own member functions instead.
 
 [sbn]: https://en.wikipedia.org/wiki/Set-builder_notation
 [eri]: https://en.wikipedia.org/wiki/Erase-remove_idiom
