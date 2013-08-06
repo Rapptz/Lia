@@ -67,7 +67,6 @@ private:
     iterator last;
 public:
     static_assert(std::is_integral<T>(), "numeric_range must be integral types only");
-    static constexpr bool infinite = Infinite;
     numeric_range() {}
     numeric_range(T begin): first(begin) {}
     numeric_range(T begin, T end): first(begin), last(end) {
@@ -94,6 +93,10 @@ public:
 
     bool empty() const {
         return first == last;
+    }
+
+    static constexpr bool is_infinite() {
+        return Infinite;
     }
 
     void pop_back() {
