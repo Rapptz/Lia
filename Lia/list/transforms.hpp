@@ -7,6 +7,17 @@
 #include <algorithm>
 
 namespace lia {
+namespace transform_detail {
+struct has_sort_impl {
+    template<typename T>
+    static auto test(T* t) -> decltype(t->sort(0), Bool<true>()) {}
+    template<typename>
+    static auto test(...) -> Bool<false>;
+};
+
+template<typename T>
+struct has_sort : decltype(has_sort_impl::test<T>(0)) {};
+} // transform_detail
 template<class Cont, typename Function>
 inline auto map(Cont&& cont, Function&& f) -> Rebind<Unqualified<Cont>, decltype(f(cont.back()))> {
     Rebind<Unqualified<Cont>, decltype(f(cont.back()))> result;
@@ -63,9 +74,15 @@ inline auto permutations(Cont cont) -> Rebind<Unqualified<Cont>, Unqualified<Con
     return result;
 }
 
-template<class Cont, class Predicate = less>
+template<class Cont, class Predicate = less, DisableIf<transform_detail::has_sort<Unqualified<Cont>>>...>
 inline Unqualified<Cont> sort(Cont cont, Predicate&& pred = Predicate()) {
     std::sort(std::begin(cont), std::end(cont), pred);
+    return cont;
+}
+
+template<class Cont, class Predicate = less, EnableIf<transform_detail::has_sort<Unqualified<Cont>>>...>
+inline Unqualified<Cont> sort(Cont cont, Predicate&& pred = Predicate()) {
+    cont.sort(pred);
     return cont;
 }
 
