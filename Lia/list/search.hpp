@@ -6,6 +6,17 @@
 #include <algorithm>
 
 namespace lia {
+namespace search_detail {
+struct has_remove_if_impl {
+    template<typename T>
+    static auto test(T* t) -> decltype(t->remove_if(0), Bool<true>()) {}
+    template<typename>
+    static auto test(...) -> Bool<false>;
+};
+
+template<typename T>
+struct has_remove_if : decltype(has_remove_if_impl::test<T>(0)) {};
+} // search_detail
 const size_t npos = -1;
 
 template<class Cont>
@@ -35,9 +46,15 @@ inline auto find(Cont&& cont, Predicate&& pred) -> decltype(std::begin(cont)) {
     return last;
 }
 
-template<class Cont, class Predicate>
+template<class Cont, class Predicate, DisableIf<search_detail::has_remove_if<Unqualified<Cont>>>...>
 inline Unqualified<Cont> filter(Cont cont, Predicate&& pred) {
     cont.erase(std::remove_if(std::begin(cont), std::end(cont), negator<Predicate>(pred)), std::end(cont));
+    return cont;
+}
+
+template<class Cont, class Predicate, EnableIf<search_detail::has_remove_if<Unqualified<Cont>>>...>
+inline Unqualified<Cont> filter(Cont cont, Predicate&& pred) {
+    cont.remove_if(negator<Predicate>(pred));
     return cont;
 }
 
