@@ -102,7 +102,7 @@ inline bool any(Cont&& cont, Predicate&& pred) {
                        std::forward<Predicate>(pred));
 }
 
-template<class Cont, DisableIf<is_std_string<ValueType<Cont>>>...>
+template<class Cont, DisableIf<has_append<ValueType<Cont>>>...>
 inline auto concat(Cont&& cont) -> Rebind<Unqualified<Cont>, NestedValueType<Cont>> {
     Rebind<Unqualified<Cont>, NestedValueType<Cont>> result;
     for(auto&& internal : cont) {
@@ -111,11 +111,11 @@ inline auto concat(Cont&& cont) -> Rebind<Unqualified<Cont>, NestedValueType<Con
     return result;
 }
 
-template<class Cont, EnableIf<is_std_string<ValueType<Cont>>>...>
+template<class Cont, EnableIf<has_append<ValueType<Cont>>>...>
 inline auto concat(Cont&& cont) -> ValueType<Cont> {
     ValueType<Cont> result;
     for(auto&& str : cont)
-        result += str;
+        result.append(str);
     return result;
 }
 

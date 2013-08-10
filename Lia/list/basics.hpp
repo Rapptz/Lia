@@ -17,8 +17,8 @@ template<typename T>
 struct has_pop_front : decltype(has_pop_front_impl::test<T>(0)) {};
 } // basics_detail
 
-template<class Cont1, class Cont2 = Cont1, DisableIf<is_std_string<Unqualified<Cont1>>,
-                                                     is_std_string<Unqualified<Cont2>>>...>
+template<class Cont1, class Cont2 = Cont1, DisableIf<has_append<Unqualified<Cont1>>,
+                                                     has_append<Unqualified<Cont2>>>...>
 inline Unqualified<Cont1> append(Cont1 first, Cont2&& other) {
     first.insert(std::end(first),
                   std::begin(other),
@@ -26,8 +26,8 @@ inline Unqualified<Cont1> append(Cont1 first, Cont2&& other) {
     return first;
 }
 
-template<class Str, class Str2 = Str, EnableIf<is_std_string<Unqualified<Str>>,
-                                               is_std_string<Unqualified<Str2>>>...>
+template<class Str, class Str2 = Str, EnableIf<has_append<Unqualified<Str>>,
+                                               has_append<Unqualified<Str2>>>...>
 inline Unqualified<Str> append(Str first, Str2&& other) {
     first.append(std::forward<Str2>(other));
     return first;

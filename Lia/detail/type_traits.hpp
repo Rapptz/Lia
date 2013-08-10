@@ -217,18 +217,15 @@ constexpr auto max(T&& t, U&& u, Args&&... args) -> CommonType<T,U,Args...> {
     return max(max(std::forward<T>(t), std::forward<U>(u)), std::forward<Args>(args)...);
 }
 
-template<typename T>
-struct is_std_string {
-private:
-    using yes = char;
-    using no = struct { char stuff[2]; };
-    template<class Cont>
-    static yes test(decltype(Cont::npos)*);
-    template<class Cont>
-    static no test(...);
-public:
-    static constexpr bool value = sizeof(test<T>(0)) == sizeof(yes);
+struct has_append_impl {
+    template<typename T>
+    static auto test(T* t) -> decltype(t->append(0), Bool<true>()) {}
+    template<typename>
+    static auto test(...) -> Bool<false>;
 };
+
+template<typename T>
+struct has_append : decltype(has_append_impl::test<T>(0)) {};
 
 template<typename T>
 struct is_nested_container {
