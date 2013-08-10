@@ -5,7 +5,7 @@
 #include "../detail/iterator.hpp"
 
 namespace lia {
-namespace detail {
+namespace basics_detail {
 struct has_pop_front_impl {
     template<typename T>
     static auto test(T* t) -> decltype(t->pop_front(), Bool<true>()) {}
@@ -15,7 +15,8 @@ struct has_pop_front_impl {
 
 template<typename T>
 struct has_pop_front : decltype(has_pop_front_impl::test<T>(0)) {};
-} // detail
+} // basics_detail
+
 template<class Cont1, class Cont2 = Cont1, DisableIf<is_std_string<Unqualified<Cont1>>,
                                                      is_std_string<Unqualified<Cont2>>>...>
 inline Unqualified<Cont1> append(Cont1 first, Cont2&& other) {
@@ -42,13 +43,13 @@ inline auto last(Cont&& cont) -> decltype(cont.back()) {
     return cont.back();
 }
 
-template<class Cont, DisableIf<detail::has_pop_front<Unqualified<Cont>>>...>
+template<class Cont, DisableIf<basics_detail::has_pop_front<Unqualified<Cont>>>...>
 inline Unqualified<Cont> tail(Cont result) {
     result.erase(std::begin(result)); // Not all containers have pop_front
     return result;
 }
 
-template<class Cont, EnableIf<detail::has_pop_front<Unqualified<Cont>>>...>
+template<class Cont, EnableIf<basics_detail::has_pop_front<Unqualified<Cont>>>...>
 inline Unqualified<Cont> tail(Cont result) {
     result.pop_front();
     return result;
