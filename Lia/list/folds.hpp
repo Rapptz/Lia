@@ -68,8 +68,9 @@ inline ValueType<Cont> maximum(Cont&& cont, Predicate&& pred = Predicate()) {
                               std::forward<Predicate>(pred)));
 }
 
-template<class Cont, EnableIf<std::is_same<ValueType<Cont>, bool>>...>
+template<class Cont>
 inline bool all(Cont&& cont) {
+    static_assert(std::is_convertible<ValueType<Cont>, bool>(), "\"all\" special fold requires boolean conversion");
     for(auto&& boolean : cont) {
         if(!boolean)
             return false;
@@ -84,8 +85,9 @@ inline bool all(Cont&& cont, Predicate&& pred) {
                        std::forward<Predicate>(pred));
 }
 
-template<class Cont, EnableIf<std::is_same<ValueType<Cont>, bool>>...>
+template<class Cont>
 inline bool any(Cont&& cont) {
+    static_assert(std::is_convertible<ValueType<Cont>, bool>(), "\"any\" special fold requires boolean conversion");
     for(auto&& boolean : cont) {
         if(boolean)
             return true;
