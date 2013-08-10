@@ -15,8 +15,18 @@ struct has_sort_impl {
     static auto test(...) -> Bool<false>;
 };
 
+struct has_reverse_impl {
+    template<typename T>
+    static auto test(T* t) -> decltype(t->reverse(), Bool<true>()) {}
+    template<typename>
+    static auto test(...) -> Bool<false>;
+};
+
 template<typename T>
 struct has_sort : decltype(has_sort_impl::test<T>(0)) {};
+
+template<typename T>
+struct has_reverse : decltype(has_reverse_impl::test<T>(0)) {};
 } // transform_detail
 template<class Cont, typename Function>
 inline auto map(Cont&& cont, Function&& f) -> Rebind<Unqualified<Cont>, decltype(f(cont.back()))> {
@@ -25,9 +35,15 @@ inline auto map(Cont&& cont, Function&& f) -> Rebind<Unqualified<Cont>, decltype
     return result;
 }
 
-template<class Cont>
+template<class Cont, DisableIf<transform_detail::has_reverse<Unqualified<Cont>>>...>
 inline Unqualified<Cont> reverse(Cont cont) {
     std::reverse(std::begin(cont), std::end(cont));
+    return cont;
+}
+
+template<class Cont, EnableIf<transform_detail::has_reverse<Unqualified<Cont>>>...>
+inline Unqualified<Cont> reverse(Cont cont) {
+    cont.reverse();
     return cont;
 }
 
