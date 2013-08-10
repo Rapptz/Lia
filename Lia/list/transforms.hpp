@@ -8,8 +8,8 @@
 
 namespace lia {
 template<class Cont, typename Function>
-inline auto map(const Cont& cont, Function&& f) -> Rebind<Cont, decltype(f(cont.back()))> {
-    Rebind<Cont, decltype(f(cont.back()))> result;
+inline auto map(Cont&& cont, Function&& f) -> Rebind<Unqualified<Cont>, decltype(f(cont.back()))> {
+    Rebind<Unqualified<Cont>, decltype(f(cont.back()))> result;
     std::transform(std::begin(cont),std::end(cont), std::back_inserter(result), f);
     return result;
 }
@@ -21,7 +21,7 @@ inline Unqualified<Cont> reverse(Cont cont) {
 }
 
 template<class Cont>
-inline Unqualified<Cont> intersperse(const Cont& cont, ValueType<Cont> elem) {
+inline Unqualified<Cont> intersperse(Cont&& cont, ValueType<Cont> elem) {
     Unqualified<Cont> result;
     auto first = std::begin(cont);
     auto last = std::end(cont);
@@ -35,15 +35,17 @@ inline Unqualified<Cont> intersperse(const Cont& cont, ValueType<Cont> elem) {
 }
 
 template<class Cont>
-inline auto subsequences(const Cont& cont) -> Rebind<Cont, Unqualified<Cont>> {
-    Rebind<Cont, Unqualified<Cont>> result;
+inline auto subsequences(Cont&& cont) -> Rebind<Unqualified<Cont>, Unqualified<Cont>> {
+    Rebind<Unqualified<Cont>, Unqualified<Cont>> result;
     auto first = std::begin(cont);
     Unqualified<Cont> temp;
     auto max = 1ULL << cont.size();
     for(unsigned i = 0; i < max; ++i) {
         for(unsigned j = 0, h = i; h; h >>= 1, ++j) {
-            if(h & 1)
-                temp.push_back(*(first + j));
+            if(h & 1) {
+                auto iter = std::next(first, j);
+                temp.push_back(*iter);
+            }
         }
         result.push_back(temp);
         temp.clear();
