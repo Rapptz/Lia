@@ -9,3 +9,6 @@ dev.cpp
 *.vcxproj*
 [Dd]ebug/*
 [Rr]elease/*
+
+# Ignore all .bat files
+*.bat
