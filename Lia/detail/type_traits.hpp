@@ -255,10 +255,10 @@ struct has_end_impl {
 };
 
 template<typename T>
-struct has_begin : decltype(has_begin_impl::test<T>()) {};
+struct has_begin : decltype(has_begin_impl::test<T>(0)) {};
 
 template<typename T>
-struct has_end : decltype(has_end_impl::test<T>()) {};
+struct has_end : decltype(has_end_impl::test<T>(0)) {};
 
 template<typename T>
 struct has_begin_end : Bool<has_begin<T>() && has_end<T>()> {};
