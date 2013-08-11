@@ -93,7 +93,7 @@ inline maybe<Decay<T>> just(T&& value) {
     return maybe<Decay<T>>{std::forward<T>(value)};
 }
 
-inline maybe<detail::nothing_t> nothing() {
+inline maybe<nothing_t> nothing() {
     return {};
 }
 } // lia
