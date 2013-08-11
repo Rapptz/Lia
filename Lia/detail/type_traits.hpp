@@ -239,6 +239,29 @@ private:
 public:
     static constexpr bool value = sizeof(test<T>(0)) == sizeof(yes);
 };
+
+struct has_begin_impl {
+    template<typename T>
+    static auto test(T* t) -> decltype(t->begin(), Bool<true>()) {}
+    template<typename>
+    static auto test(...) -> Bool<false>;
+};
+
+struct has_end_impl {
+    template<typename T>
+    static auto test(T* t) -> decltype(t->end(), Bool<true>()) {}
+    template<typename>
+    static auto test(...) -> Bool<false>;
+};
+
+template<typename T>
+struct has_begin : decltype(has_begin_impl::test<T>()) {};
+
+template<typename T>
+struct has_end : decltype(has_end_impl::test<T>()) {};
+
+template<typename T>
+struct has_begin_end : Bool<has_begin<T>() && has_end<T>()> {};
 } // lia
 
 #endif // LIA_DETAIL_TYPE_TRAITS_HPP
