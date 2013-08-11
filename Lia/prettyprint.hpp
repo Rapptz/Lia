@@ -1,9 +1,9 @@
 #ifndef LIA_PRETTY_PRINT_HPP
 #define LIA_PRETTY_PRINT_HPP
 
-#include "../detail/type_traits.hpp"
-#include "../detail/iterator.hpp"
-#include "../detail/indices.hpp"
+#include "detail/type_traits.hpp"
+#include "detail/iterator.hpp"
+#include "detail/indices.hpp"
 #include <iosfwd>
 
 namespace lia {
