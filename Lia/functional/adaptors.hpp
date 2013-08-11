@@ -1,0 +1,6 @@
+#ifndef LIA_FUNCTIONAL_ADAPTORS_HPP
+#define LIA_FUNCTIONAL_ADAPTORS_HPP
+
+#include "adaptors/negator.hpp"
+
+#endif // LIA_FUNCTIONAL_ADAPTORS_HPP
